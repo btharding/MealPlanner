@@ -9,9 +9,11 @@
             <label for = "newIngredient">Ingredients (comma separated): </label>
             <input name = "newIngredient" type = "text" v-model="currentIngredient" @input="handleIngredientChange"/>
 
-            <ul v-if="currentRecipe.ingredients">
-                <li v-for="ingredient in currentRecipe.ingredients" :key = "ingredient.id">{{ingredient.name}}</li>
-            </ul><br/>
+            <div v-if="currentRecipe.ingredients">
+                <div class = "newIngredientsListContainer">
+                    <div class = "newIngredient" v-for="ingredient in currentRecipe.ingredients" :key = "ingredient.id" contenteditable @input="changeee($event, ingredient)">{{ingredient.name}}</div>
+                </div>
+            </div><br/>
 
             <input type = "submit" value="Submit"/>
         </form>
@@ -28,6 +30,18 @@
         <h3 v-else>No recipes found</h3>
     </div>
 </template>
+
+<style scoped>
+    .newIngredientsListContainer{
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .newIngredient {
+        margin: 5px 10px 5px 0px;
+        border: 1px solid lightgray;
+    }
+</style>
 
 <script>
     export default {
@@ -49,6 +63,10 @@
             }
         },
         methods: {
+            changeee(e, ingredient) {
+                ingredient.name = e.target.innerText;
+                //TODO -> Ensure this correctly handles "addNewIngredient"
+            },
             generateUniqueId(existingArray) {
                 while (true) {
                     let candidateId = Math.random().toString(16).slice(2);
