@@ -4,7 +4,7 @@
         <h2>New recipe:</h2>
         <form @submit="submit">
             <label for = "recipeName">Recipe Name: </label>
-            <input name = "recipeName" type = "text" v-model="currentRecipe.name" required/><br/>
+            <input name = "recipeName" type = "text" v-model="currentRecipe.name"/><br/>
 
             <label for = "newIngredient">Ingredients (comma separated): </label>
             <input name = "newIngredient" type = "text" v-model="currentIngredient" @input="handleIngredientChange"/>
@@ -59,6 +59,17 @@
             },
             submit(e) {
                 e.preventDefault();
+
+                if (!this.currentRecipe.name) {
+                    alert('Please add a recipe name');
+                    return;
+                }
+
+                if (!this.currentRecipe.ingredients) {
+                    alert('Please add some ingredients');
+                    return;
+                }
+
                 this.currentRecipe.id = this.generateUniqueId(this.recipes);
 
                 this.recipes.push(this.currentRecipe);
