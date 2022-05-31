@@ -6,5 +6,8 @@ export default {
                 return candidateId;
             }
         }
+    },
+    cleanText(text) {
+        return text.trim().replace(/\n/, '');
     }
 }
