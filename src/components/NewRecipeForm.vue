@@ -10,12 +10,6 @@
         <div v-if="recipe.ingredients.length">
             <div v-for="ingredient in recipe.ingredients" :key="ingredient.id" contenteditable @input="updateIngredient($event, ingredient.id)" @blur="cleanupIngredientsList($event, ingredient.id)">{{ingredient.name}}</div>
         </div><br/>
-
-
-        <div v-if="recipe.ingredients.length">
-            <div v-for="ingredient in recipe.ingredients" :key="ingredient.id">{{ingredient.name}}</div>
-        </div><br/>
-
         <input type = "submit" value="Submit"/>
     </form>
 </template>

@@ -1,8 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import RecipesView from '../views/RecipesView.vue'
-import MealPlanView from '../views/MealPlanView.vue'
-import NewPlanView from '../views/NewPlanView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
+import RecipesView from '../views/RecipesView.vue';
+import MealPlanView from '../views/MealPlanView.vue';
+import NewPlanView from '../views/NewPlanView.vue';
+import UploadMealDataView from '../views/UploadMealDataView.vue';
 
 
 const router = createRouter({
@@ -28,7 +29,12 @@ const router = createRouter({
       name: 'meal-plan',
       component: MealPlanView
     },
+    {
+      path: '/upload-meal-data',
+      name: 'upload-meal-data',
+      component: UploadMealDataView
+    },
   ]
-})
+});
 
-export default router
+export default router;
