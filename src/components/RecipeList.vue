@@ -48,7 +48,7 @@ export default {
             let ingredientName = Helpers.cleanText(event.target.value);
             if (ingredientName.length) {
                 this.updatedRecipe = {...recipe};
-                this.updatedRecipe.ingredients.push(DataHandler.createNewIngredient(ingredientName));
+                this.updatedRecipe.ingredients.push({name: ingredientName});
                 this.$emit('updateRecipe', this.updatedRecipe);
                 this.updatedRecipe = {};
             }

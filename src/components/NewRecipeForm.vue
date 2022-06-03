@@ -55,7 +55,7 @@ export default {
             this.recipe.ingredients.find(ingredient => ingredient.id === id).name = event.target.innerText;
         },
         addNewIngredient(ingredientName) {
-            this.recipe.ingredients.push(DataHandler.createNewIngredient(ingredientName));
+            this.recipe.ingredients.push({name: ingredientName});
         },
         handleIngredientInput() {
             if (this.newIngredient.slice(-1) === ',') {
