@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import DataHandler from '../scripts/DataHandler';
 import helpers from '../scripts/Helpers';
 export default {
     name: "NewRecipeForm",
@@ -60,11 +61,7 @@ export default {
             this.recipe.ingredients.find(ingredient => ingredient.id === id).name = event.target.innerText;
         },
         addNewIngredient(ingredientName) {
-            let ingredient = {
-                name: ingredientName,
-                id: helpers.generateUniqueId(this.recipe.ingredients)
-            };
-            this.recipe.ingredients.push(ingredient);
+            this.recipe.ingredients.push(DataHandler.createNewIngredient(ingredientName));
         },
         handleIngredientInput() {
             if (this.newIngredient.slice(-1) === ',') {

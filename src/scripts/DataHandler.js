@@ -25,5 +25,9 @@ export default {
         //TODO: Index this recipe by all ingredients
         this.saveRecipes(recipes);
         return recipes;
+    },
+    createNewIngredient(ingredientName) {
+        //TODO: Properly index ingredients using correct ID's
+        return {name: ingredientName, id: Helpers.generateUniqueId([])};
     }
 }

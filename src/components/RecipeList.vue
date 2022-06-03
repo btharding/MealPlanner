@@ -4,11 +4,13 @@
         <div v-for="recipe in recipes" :key="recipe.id">
             <h3>{{recipe.name}}</h3>
             <span v-for = "ingredient in recipe.ingredients" :key = "ingredient.id" v-text="ingredient.name" style="margin: 10px;" contenteditable @blur="handleIngredientChange($event, ingredient, recipe)" @keydown.enter="$event.target.blur()"></span>
+            <input type = "text" placeholder="Add new ingredient..." @keydown.enter="addNewIngredient($event, recipe)"/>
         </div>
     </div>
 </template>
 
 <script>
+import DataHandler from '../scripts/DataHandler';
 import Helpers from '../scripts/Helpers';
 
 export default {
@@ -19,12 +21,20 @@ export default {
         }
     },
     methods: {
+        addNewIngredient(event, recipe) {
+            let ingredientName = Helpers.cleanText(event.target.value);
+            if (ingredientName.length) {
+                this.updatedRecipe = {...recipe};
+                this.updatedRecipe.ingredients.push(DataHandler.createNewIngredient(ingredientName));
+                this.$emit('updateRecipe', this.updatedRecipe);
+                this.updatedRecipe = {};
+            }
+            event.target.value = '';
+            event.target.blur();
+        },
         handleIngredientChange(event, ingredient, recipe) {
             let newName = Helpers.cleanText(event.target.innerText);
-            console.log(newName);
-
             let oldName = ingredient.name;
-            console.log(oldName);
 
             if (newName == oldName) {
                 event.target.innerText = oldName;
