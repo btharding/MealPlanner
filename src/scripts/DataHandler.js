@@ -15,7 +15,7 @@ export default {
         this.saveRecipes(recipes);
         return recipes;
     },
-    addRecipe(recipe, recipes) {
+    addOrUpdateRecipe(recipe, recipes) {
         if ("id" in recipe) {
             if (recipe.ingredients.length) {
                 recipes = recipes.map((candidateRecipe) => candidateRecipe.id == recipe.id ? recipe : candidateRecipe);

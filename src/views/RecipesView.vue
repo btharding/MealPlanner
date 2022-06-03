@@ -26,10 +26,10 @@
                 this.recipes = DataHandler.deleteRecipe(recipeId, [...this.recipes]);
             },
             updateRecipe(updatedRecipe) {
-                this.recipes = DataHandler.addRecipe(updatedRecipe, [...this.recipes]);
+                this.recipes = DataHandler.addOrUpdateRecipe(updatedRecipe, [...this.recipes]);
             },
             addRecipe(recipe) {
-                this.recipes = DataHandler.addRecipe(recipe, [...this.recipes]);
+                this.recipes = DataHandler.addOrUpdateRecipe(recipe, [...this.recipes]);
             }
         }
     }
