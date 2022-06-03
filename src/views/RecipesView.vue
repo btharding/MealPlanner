@@ -2,7 +2,7 @@
     <div>
         <h1>Recipes</h1>
         <NewRecipeForm @submitRecipe="addRecipe($event)"></NewRecipeForm>
-        <RecipeList :recipes="recipes" @updateRecipe="updateRecipe($event)"></RecipeList>
+        <RecipeList :recipes="recipes" @updateRecipe="updateRecipe($event)" @deleteRecipe="deleteRecipe($event)"></RecipeList>
     </div>
 </template>
 
@@ -22,11 +22,14 @@
             this.recipes = DataHandler.fetchRecipes();
         },
         methods: {
+            deleteRecipe(recipeId) {
+                this.recipes = DataHandler.deleteRecipe(recipeId, [...this.recipes]);
+            },
             updateRecipe(updatedRecipe) {
                 this.recipes = DataHandler.addRecipe(updatedRecipe, [...this.recipes]);
             },
             addRecipe(recipe) {
-                this.recipes = DataHandler.addRecipe(recipe, this.recipes);
+                this.recipes = DataHandler.addRecipe(recipe, [...this.recipes]);
             }
         }
     }

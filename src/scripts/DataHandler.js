@@ -10,12 +10,18 @@ export default {
     saveRecipes(recipes) {
         localStorage.recipes = JSON.stringify(recipes);
     },
+    deleteRecipe(recipeId, recipes) {
+        recipes = recipes.filter((recipe) => recipe.id !== recipeId);
+        this.saveRecipes(recipes);
+        return recipes;
+    },
     addRecipe(recipe, recipes) {
         if ("id" in recipe) {
             if (recipe.ingredients.length) {
                 recipes = recipes.map((candidateRecipe) => candidateRecipe.id == recipe.id ? recipe : candidateRecipe);
             } else {
-                recipes = recipes.filter((candidateRecipe) => candidateRecipe.id !== recipe.id);
+                console.error('Handling recipe deletion in addRecipe. This should be done in deleteRecipe');
+                return this.deleteRecipe(recipe.id, recipes);
             }
         } else {
             recipe.id = Helpers.generateUniqueId(recipes);
