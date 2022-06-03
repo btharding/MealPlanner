@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import helpers from '../Helpers';
+import helpers from '../scripts/Helpers';
 export default {
     name: "NewRecipeForm",
     emits: ["submitRecipe"],

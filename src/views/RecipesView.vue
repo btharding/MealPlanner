@@ -9,7 +9,7 @@
 <script>
     import NewRecipeForm from '../components/NewRecipeForm.vue';
     import RecipeList from '../components/RecipeList.vue';
-    import helpers from '../Helpers';
+    import DataHandler from '../scripts/DataHandler';
     export default {
         name: "RecipesView",
         components: { NewRecipeForm, RecipeList },
@@ -19,24 +19,14 @@
             }
         },
         mounted () {
-            if (localStorage.recipes) {
-                this.recipes = JSON.parse(localStorage.recipes);
-            }
+            this.recipes = DataHandler.fetchRecipes();
         },
         methods: {
             updateRecipe(updatedRecipe) {
-                this.recipes = this.recipes.map((recipe) => recipe.id === updatedRecipe.id ? updatedRecipe : recipe);
-                this.saveRecipes();
-            },
-            saveRecipes() {
-                localStorage.recipes = JSON.stringify(this.recipes);
+                this.recipes = DataHandler.addRecipe(updatedRecipe, [...this.recipes]);
             },
             addRecipe(recipe) {
-                //TODO: Add correct ID's for ingredients
-                //TODO: Save recipe ID's indexed by ingredient ID's for searching
-                recipe.id = helpers.generateUniqueId(this.recipes);
-                this.recipes.push(recipe);
-                this.saveRecipes();
+                this.recipes = DataHandler.addRecipe(recipe, this.recipes);
             }
         }
     }
