@@ -8,7 +8,7 @@
         <input name = "newIngredient" type = "text" v-model="newIngredient" @input="handleIngredientInput"/>
 
         <div v-if="recipe.ingredients.length">
-            <div v-for="ingredient in recipe.ingredients" :key="ingredient.id" contenteditable @input="updateIngredient($event, ingredient.id)" @blur="cleanupIngredientsList()" v-text="ingredient.name"></div>
+            <div v-for="ingredient in recipe.ingredients" :key="ingredient.id" :ref="ingredient.id" contenteditable @input="updateIngredient($event, ingredient.id)" @blur="cleanupIngredientsList()" v-text="ingredient.name"></div>
         </div><br/>
         <input type = "submit" value="Submit"/>
     </form>
@@ -45,8 +45,7 @@ export default {
             this.recipe.ingredients = [];
         },
         cleanupIngredientsList() {
-            this.recipe.ingredients = this.recipe.ingredients.map(({name, ...ingredient}) => ({name: Helpers.toUpperCamelCase(name), ...ingredient}));
-            
+            console.log('a');
             this.recipe.ingredients = this.recipe.ingredients.filter(ingredient => ingredient.name.length);
 
             let tempIngredientList = [];
@@ -61,8 +60,21 @@ export default {
             this.recipe.ingredients.find(ingredient => ingredient.id === id).name = event.target.innerText;
         },
         addNewIngredient(ingredientName) {
-            this.recipe.ingredients.push({name: ingredientName, id: Helpers.generateUniqueId(this.recipe.ingredients)});
-            this.cleanupIngredientsList();
+            ingredientName = Helpers.toUpperCamelCase(ingredientName);
+            if (this.checkForAndHandleDuplicates(ingredientName)) {
+                this.recipe.ingredients.push({name: ingredientName, id: Helpers.generateUniqueId(this.recipe.ingredients)});
+            }
+        },
+        checkForAndHandleDuplicates(ingredientName) {
+            let existing = this.recipe.ingredients.filter(ingredient => ingredient.name === ingredientName);
+
+            if (!existing[0]) {
+                return true;
+            }
+
+            let target = this.$refs[existing[0].id][0];
+            Helpers.errorFlash(target);
+            return false;
         },
         handleIngredientInput() {
             if (this.newIngredient.slice(-1) === ',') {

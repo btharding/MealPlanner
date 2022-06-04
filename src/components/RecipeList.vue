@@ -1,96 +1,26 @@
-//TODO: Move each recipe into own component, and localise flashing errors
 <template>
     <div v-if="recipes.length">
         <h3>Recipes:</h3>
         <div v-for="recipe in recipes" :key="recipe.id">
-            <h3 contenteditable v-text="recipe.name" @keydown.enter="$event.target.blur()" @blur="handleRecipeNameChange($event, recipe)"></h3>
-            <span v-for = "ingredient in recipe.ingredients" :key = "ingredient.id" v-text="ingredient.name" style="margin: 10px;" contenteditable @blur="handleIngredientChange($event, ingredient, recipe)" @keydown.enter="$event.target.blur()"></span>
-            <input type = "text" placeholder="Add new ingredient..." @keydown.enter="addNewIngredient($event, recipe)"/>
+            <RecipeListRecipe :recipe = "recipe" @deleteRecipe="this.$emit('deleteRecipe', $event)" @updateRecipe="this.$emit('updateRecipe', $event)"></RecipeListRecipe>
         </div>
     </div>
 </template>
 
 <script>
-import DataHandler from '../scripts/DataHandler';
-import Helpers from '../scripts/Helpers';
+import RecipeListRecipe from './RecipeListRecipe.vue';
 
 export default {
     name: "RecipeList",
-    data () {
+    data() {
         return {
-            'updatedRecipe': {}
-        }
-    },
-    methods: {
-        handleRecipeNameChange(event, recipe) {
-            let newName = Helpers.cleanText(event.target.innerText);
-            let oldName = recipe.name;
-
-            if (newName == oldName) {
-                event.target.innerText = oldName;
-                return;
-            }
-
-            if (newName.length == 0) {
-                if (confirm('Are you  sure? This will delete the recipe')) {
-                    this.$emit('deleteRecipe', recipe.id);
-                } else {
-                    event.target.innerText = oldName;
-                }
-                return;
-            }
-
-            this.updatedRecipe = {...recipe};
-            this.updatedRecipe.name = newName;
-            this.$emit('updateRecipe', this.updatedRecipe);
-            this.updatedRecipe = {};
-        },
-        addNewIngredient(event, recipe) {
-            let ingredientName = Helpers.toUpperCamelCase(event.target.value);
-            if (ingredientName.length) {
-                this.updatedRecipe = {...recipe};
-                let existingIngredient = this.updatedRecipe.ingredients.filter(ingredient => ingredient.name == ingredientName);
-                if (!existingIngredient[0]) {
-                    this.updatedRecipe.ingredients.push({name: ingredientName});
-                    this.$emit('updateRecipe', this.updatedRecipe);
-                }
-                this.updatedRecipe = {};
-            }
-            event.target.value = '';
-            event.target.blur();
-        },
-        handleIngredientChange(event, ingredient, recipe) {
-            let newName = Helpers.cleanText(event.target.innerText);
-            let oldName = ingredient.name;
-
-            if (newName == oldName) {
-                event.target.innerText = oldName;
-                return;
-            }
-
-            this.updatedRecipe = {...recipe};
-
-            if (newName.length == 0) {
-                if (recipe.ingredients.length == 1) {
-                    if (confirm('Are you sure? This will delete the recipe')) {
-                        this.$emit('deleteRecipe', recipe.id);
-                        this.updatedRecipe = {};
-                    } else {
-                        event.target.innerText = oldName;
-                    }
-                    return;
-                }
-                this.updatedRecipe.ingredients = this.updatedRecipe.ingredients.filter((candidateIngredient) => candidateIngredient.id !== ingredient.id);
-            } else {
-                this.updatedRecipe.ingredients = this.updatedRecipe.ingredients.map(({id, name, ...candidateIngredient}) => ({id: id, name: (id == ingredient.id ? newName : name), ...candidateIngredient}));
-            }
-
-            this.$emit('updateRecipe', this.updatedRecipe);
-            this.updatedRecipe = {};
-        }
+            "updatedRecipe": {}
+        };
     },
     props: {
         recipes: Array
-    }
+    },
+    components: { RecipeListRecipe },
+    emits: ["updateRecipe", "deleteRecipe"],
 }
 </script>

@@ -15,5 +15,11 @@ export default {
     },
     normaliseText(text) {
         return this.cleanText(text).toLowerCase().replace(/\s/, '_');
+    },
+    errorFlash(element) {
+        element.classList.add('alert');
+        setTimeout(() => {
+            element.classList.remove('alert');
+        }, 750)
     }
 }

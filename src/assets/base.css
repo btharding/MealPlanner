@@ -1,5 +1,25 @@
-.flash {
-  animation-name: highlightAndShake;
-  animation-duration: 1s;
-  background-color: red;
+.alert {
+  animation-name: flashing;
+  animation-duration: 0.75s;
+}
+
+@keyframes flashing {
+ 0% {
+     background-color: inherit;
+     top: 0;
+ }
+
+ 25% {
+     background-color: red;
+     top: -5px;
+ }
+ 75% {
+     background-color: red;
+     top: 5px;
+ }
+
+ 100% {
+     background-color: inherit;
+     top: 0;
+ }
 }
