@@ -50,7 +50,7 @@ export default {
                 if (!ingredients.filter(ing => ing.id == currentIngredient.id).length) {
                     ingredients.push(currentIngredient);
                 }
-                ingredientMap = this.addToIngredientMap(ingredientMap, currentIngredient.id, currentRecipe.id);
+                ingredientMap = this.addToIngredientMap(ingredientMap, currentIngredient.name, currentRecipe.id);
             }
         }
         this.saveIngredients(ingredients);
@@ -70,12 +70,13 @@ export default {
     saveIngredientIndex(ingredientIndex) {
         localStorage.ingredientIndex = JSON.stringify(ingredientIndex);
     },
-    addToIngredientMap(ingredientMap, ingredientId, recipeId) {
-        if (!ingredientMap[ingredientId]) {
+    addToIngredientMap(ingredientMap, ingredientName, recipeId) {
+        ingredientName = Helpers.normaliseText(ingredientName);
+        if (!ingredientMap[ingredientName]) {
             let value = [recipeId];
-            ingredientMap[ingredientId] = value;
+            ingredientMap[ingredientName] = value;
         } else {
-            ingredientMap[ingredientId].push(recipeId);
+            ingredientMap[ingredientName].push(recipeId);
         }
 
         return ingredientMap;

@@ -8,15 +8,14 @@
         <input name = "newIngredient" type = "text" v-model="newIngredient" @input="handleIngredientInput"/>
 
         <div v-if="recipe.ingredients.length">
-            <div v-for="ingredient in recipe.ingredients" :key="ingredient.id" contenteditable @input="updateIngredient($event, ingredient.id)" @blur="cleanupIngredientsList($event, ingredient.id)">{{ingredient.name}}</div>
+            <div v-for="ingredient in recipe.ingredients" :key="ingredient.id" contenteditable @input="updateIngredient($event, ingredient.id)" @blur="cleanupIngredientsList()" v-text="ingredient.name"></div>
         </div><br/>
         <input type = "submit" value="Submit"/>
     </form>
 </template>
 
 <script>
-import DataHandler from '../scripts/DataHandler';
-import helpers from '../scripts/Helpers';
+import Helpers from '../scripts/Helpers';
 export default {
     name: "NewRecipeForm",
     emits: ["submitRecipe"],
@@ -40,22 +39,30 @@ export default {
                 alert('Please include some ingredients');
                 return;
             }
-            let submittedRecipe = {...this.recipe};
+            this.recipe.ingredients = this.recipe.ingredients.map(({name, ...ingredient}) => ({name: name}));
+            this.$emit('submitRecipe', {...this.recipe});
             this.recipe.name = "";
             this.recipe.ingredients = [];
-            this.$emit('submitRecipe', submittedRecipe);
         },
-        cleanupIngredientsList(event, id) {
-            let ingredientName = event.target.innerText;
-            if (!ingredientName.length) {
-                this.recipe.ingredients = this.recipe.ingredients.filter(ingredient => ingredient.id !== id);
-            }
+        cleanupIngredientsList() {
+            this.recipe.ingredients = this.recipe.ingredients.map(({name, ...ingredient}) => ({name: Helpers.toUpperCamelCase(name), ...ingredient}));
+            
+            this.recipe.ingredients = this.recipe.ingredients.filter(ingredient => ingredient.name.length);
+
+            let tempIngredientList = [];
+            this.recipe.ingredients.forEach(function (ingredient) {
+                if (!tempIngredientList.filter(ingredientInList => ingredientInList.name == ingredient.name)[0]) {
+                    tempIngredientList.push(ingredient);
+                }
+            });
+            this.recipe.ingredients = tempIngredientList;
         },
         updateIngredient(event, id) {
             this.recipe.ingredients.find(ingredient => ingredient.id === id).name = event.target.innerText;
         },
         addNewIngredient(ingredientName) {
-            this.recipe.ingredients.push({name: ingredientName});
+            this.recipe.ingredients.push({name: ingredientName, id: Helpers.generateUniqueId(this.recipe.ingredients)});
+            this.cleanupIngredientsList();
         },
         handleIngredientInput() {
             if (this.newIngredient.slice(-1) === ',') {

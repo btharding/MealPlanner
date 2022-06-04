@@ -15,11 +15,12 @@ export default {
             let rawMealData = event.target.mealData.value;
             let mealData = JSON.parse(rawMealData);
 
-            if (!mealData.recipes || !mealData.ingredients ) {
+            if (!mealData.recipes) {
                 alert('Error: Incomplete meal data');
             }
             DataHandler.saveRecipes(mealData.recipes);
-            DataHandler.saveIngredients(mealData.ingredients);
+
+            DataHandler.extractIngredientsAndIndexRecipes([], mealData.recipes);
 
             event.target.mealData.value = '';
         }
