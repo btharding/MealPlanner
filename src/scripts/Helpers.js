@@ -11,8 +11,7 @@ export default {
         return text.trim().replace(/\n/, '');
     },
     toUpperCamelCase(text) {
-        return text.split(' ').map((str) => str.charAt(0).toUpperCase() + str.slice(1)).join(' ');
-
+        return this.cleanText(text).split(' ').map((str) => str.charAt(0).toUpperCase() + str.slice(1)).join(' ');
     },
     normaliseText(text) {
         return this.cleanText(text).toLowerCase().replace(/\s/, '_');

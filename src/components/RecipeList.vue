@@ -1,3 +1,4 @@
+//TODO: Move each recipe into own component, and localise flashing errors
 <template>
     <div v-if="recipes.length">
         <h3>Recipes:</h3>
@@ -45,11 +46,14 @@ export default {
             this.updatedRecipe = {};
         },
         addNewIngredient(event, recipe) {
-            let ingredientName = Helpers.cleanText(event.target.value);
+            let ingredientName = Helpers.toUpperCamelCase(event.target.value);
             if (ingredientName.length) {
                 this.updatedRecipe = {...recipe};
-                this.updatedRecipe.ingredients.push({name: ingredientName});
-                this.$emit('updateRecipe', this.updatedRecipe);
+                let existingIngredient = this.updatedRecipe.ingredients.filter(ingredient => ingredient.name == ingredientName);
+                if (!existingIngredient[0]) {
+                    this.updatedRecipe.ingredients.push({name: ingredientName});
+                    this.$emit('updateRecipe', this.updatedRecipe);
+                }
                 this.updatedRecipe = {};
             }
             event.target.value = '';
